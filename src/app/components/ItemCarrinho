@@ -71,7 +71,7 @@ export default function ItemCarrinho({ item, removerDoCarrinho, atualizarQuantid
         </div>
       </div>
 
-      {/* Preço do Produto */}
+      
       <div className="text-sm font-medium text-black">
         R$ {(item.preco * quantidade).toFixed(2)}
       </div>
