@@ -1,19 +1,21 @@
 "use client";
 
-import { useState } from 'react';
-import { useCarrinho } from '../contexto/ContextoCarrinho';
-import { motion, AnimatePresence } from 'framer-motion';
-import ItemCarrinho from '@/app/components/ItemCarrinho';
+import { useState } from 'react'; 
+import { useCarrinho } from '../contexto/ContextoCarrinho'; 
+import { motion, AnimatePresence } from 'framer-motion'; 
+import { FaSpinner } from 'react-icons/fa'; // isso foi para que o spinner pudesse ter, puxei no proprio react
+import ItemCarrinho from '@/app/components/ItemCarrinho'; 
 
-export default function NavBar() {
-  const { carrinho, removerDoCarrinho, atualizarQuantidade, calcularTotal } = useCarrinho();
-  const [isCarrinhoAberto, setIsCarrinhoAberto] = useState(false);
+export default function NavBar() { 
+  const { carrinho, removerDoCarrinho, atualizarQuantidade, calcularTotal } = useCarrinho(); 
+  const [isCarrinhoAberto, setIsCarrinhoAberto] = useState(false); 
 
   //tentando trabalhar com cep apartir daqui:
-  const [cep, setCep] = useState('');
-  const [frete, setFrete] = useState(0);
-  const [mensagemFrete, setMensagemFrete] = useState('');
-
+  const [cep, setCep] = useState(''); 
+  const [frete, setFrete] = useState(null); 
+  const [mensagemFrete, setMensagemFrete] = useState(''); 
+  const [cepValido, setCepValido] = useState(true);
+  const [carregandoCep, setCarregandoCep] = useState(false);
 
   const toggleCarrinho = () => {
     setIsCarrinhoAberto(!isCarrinhoAberto);
@@ -22,51 +24,67 @@ export default function NavBar() {
   const fecharCarrinho = () => {
     setIsCarrinhoAberto(false);
   };
+  // Uso do Regexp, ele permite ate um ' - ', e se informar letra ou algo do tipo ele acusa tambem
+  const validarCep = (value) => /^\d{5}-?\d{3}$/.test(value);
 
-  // Transportar isso daqui para um arquivo a parte.
-  const calcularFrete = async () => {
-    try {
-      const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
-      const data = await response.json();
+  const handleCepChange = (e) => { 
+    const value = e.target.value; 
+    setCep(value);
+    setCepValido(validarCep(value));
+  };
 
-      if (data.erro) {
-        setMensagemFrete('CEP inválido');
-        setFrete(0);
-        return;
-      }
+  const limparCep = () => {
+    setCep('');
+    setFrete(null);
+    setMensagemFrete('');
+    setCepValido(true);
+  };
 
-      const estado = data.uf;
+// Transportar isso daqui para um arquivo a parte.
+// Mudei um pouco a logica da questao dos valores do CEP, se quiser alterar como antes, tem que formatar p o antigo, achei que ia ficar melhor assim
+  const calcularFrete = async () => { 
+    if (!validarCep(cep)) { 
+      setMensagemFrete('CEP inválido'); 
+      setFrete(null); 
+      return; 
+    } 
 
-      if (estado === 'PB') {
-        setFrete(0);
-        setMensagemFrete('Elegível para frete grátis');
-      } else if (['RN', 'PE', 'AL', 'SE', 'BA', 'MA', 'PI', 'CE'].includes(estado)) {
-        setFrete(10);
-        setMensagemFrete('Frete: R$ 10,00');
-      } else if (['AM', 'PA', 'AC', 'RO', 'RR', 'AP', 'TO'].includes(estado)) {
-        setFrete(15);
-        setMensagemFrete('Frete: R$ 15,00');
-      } else if (['SP', 'RJ', 'MG', 'ES'].includes(estado)) {
-        setFrete(20);
-        setMensagemFrete('Frete: R$ 20,00');
-      } else if (['DF', 'GO', 'MT', 'MS'].includes(estado)) {
-        setFrete(25);
-        setMensagemFrete('Frete: R$ 25,00');
-      } else if (['RS', 'SC', 'PR'].includes(estado)) {
-        setFrete(30);
-        setMensagemFrete('Frete: R$ 30,00');
-      } else {
-        setFrete(0);
-        setMensagemFrete('Região não identificada');
-      }
-    } catch (error) {
-      setMensagemFrete('Erro ao calcular frete');
-      setFrete(0);
+    setCarregandoCep(true);
+    try { 
+      const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`); 
+      const data = await response.json(); 
+
+      if (data.erro) { 
+        setMensagemFrete('CEP não encontrado'); 
+        setFrete(null); 
+        return; 
+      } 
+
+      let valorFrete = 0; 
+      if (['RN', 'PE', 'AL', 'SE', 'BA', 'MA', 'PI', 'CE'].includes(data.uf)) { 
+        valorFrete = 10; 
+      } else if (['AM', 'PA', 'AC', 'RO', 'RR', 'AP', 'TO'].includes(data.uf)) { 
+        valorFrete = 15; 
+      } else if (['SP', 'RJ', 'MG', 'ES'].includes(data.uf)) { 
+        valorFrete = 20; 
+      } else if (['DF', 'GO', 'MT', 'MS'].includes(data.uf)) { 
+        valorFrete = 25; 
+      } else if (['RS', 'SC', 'PR'].includes(data.uf)) { 
+        valorFrete = 30; 
+      } 
+
+      setFrete(valorFrete); 
+      setMensagemFrete(`Frete: R$ ${valorFrete.toFixed(2)}`); 
+    } catch (error) { 
+      setMensagemFrete('Erro ao calcular frete'); 
+      setFrete(null); 
+    } finally {
+      setCarregandoCep(false);
     }
   };
 
-  const totalCarrinho = calcularTotal();
-  const totalComFrete = totalCarrinho + frete;
+  const totalCarrinho = calcularTotal(); 
+  const totalComFrete = totalCarrinho + (frete || 0);
 
   return (
     <nav className="bg-white shadow-md fixed w-full top-0 z-50">
@@ -136,19 +154,10 @@ export default function NavBar() {
           </button>
         </div>
       </div>
-
-      {/* Aba Lateral do Carrinho */}
+{/* Aba Lateral do Carrinho */}
       <AnimatePresence>
         {isCarrinhoAberto && (
-          <motion.div
-            initial={{ x: '100%' }}
-            animate={{ x: 0 }}
-            exit={{ x: '100%' }}
-            transition={{ type: 'tween', duration: 0.3 }}
-            className="fixed top-0 right-0 h-full w-80 bg-white shadow-lg"
-          >
-            <div className="p-4">
-              {/* Botão de Fechar */}
+          <motion.div initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} transition={{ type: 'tween', duration: 0.3 }} className="fixed top-0 right-0 h-full w-80 bg-white shadow-lg p-4 overflow-y-auto">
               <button
                 onClick={fecharCarrinho}
                 className="absolute top-4 right-4 text-black hover:text-orange-500"
@@ -165,60 +174,47 @@ export default function NavBar() {
                     clipRule="evenodd"
                   />
                 </svg>
-              </button>
+              </button>   
 
               <h2 className="text-xl font-bold mb-4 text-black">Carrinho</h2>
 
-              {/* Campo para calcular CEP */}
-              <div className="mb-4">
-                <input
-                  type="text"
-                  placeholder="Digite seu CEP"
-                  className="w-full px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:border-orange-500 text-black"
-                  value={cep}
-                  onChange={(e) => setCep(e.target.value)}
-                />
-                <button
-                  onClick={calcularFrete}
-                  className="mt-2 w-full bg-orange-500 text-white py-2 rounded-full hover:bg-orange-600"
-                >
-                  Calcular Frete
+            {/* Campo para calcular CEP */}
+            <div className="mb-4">
+              <div className="flex gap-2">
+                <input 
+                  type="text" 
+                  placeholder="Digite seu CEP" 
+                  className={`w-full px-4 py-2 rounded-full border ${cepValido ? 'border-gray-300' : 'border-red-500'} focus:outline-none text-black`} 
+                  value={cep} 
+                  onChange={handleCepChange} 
+                /> 
+                {/* Coloquei esse loop para deixar mais interativo com o usuario, pq senao ficava congelado quando ia consultar, ai assim pelo menos consegue ver quando esta carregando, e o X faz com que limpe tambem */}
+                <button onClick={carregandoCep ? null : limparCep} className="px-4 py-2 bg-gray-300 rounded-full hover:bg-gray-400">
+                  {carregandoCep ? <FaSpinner className="animate-spin" /> : '❌'}
                 </button>
-                {mensagemFrete && (
-                  <p
-                    className={`mt-2 text-sm ${
-                      frete === 0 && estado === 'PB' ? 'text-green-500' : 'text-black'
-                    }`}
-                  >
-                    {mensagemFrete}
-                  </p>
-                )}
               </div>
-
-              {/* Lista de Itens no Carrinho */}
-              {carrinho.length === 0 ? (
-                <p className="text-black">O carrinho está vazio.</p>
-              ) : (
-                <div className="space-y-4">
-                  {carrinho.map((item) => (
-                    <ItemCarrinho
-                      key={item.id}
-                      item={item}
-                      removerDoCarrinho={removerDoCarrinho}
-                      atualizarQuantidade={atualizarQuantidade}
-                    />
-                  ))}
-                </div>
-              )}
-
-              {/* Resumo do Carrinho */}
-              <div className="mt-4">
-                <p className="text-black">Subtotal: R$ {totalCarrinho.toFixed(2)}</p>
-                <p className="text-black">Frete: R$ {frete.toFixed(2)}</p>
-                <p className="text-black font-bold">
-                  Total: R$ {totalComFrete.toFixed(2)}
-                </p>
+              <button onClick={calcularFrete} className="mt-2 w-full bg-orange-500 text-white py-2 rounded-full hover:bg-orange-600">
+                Calcular Frete
+              </button>
+              {mensagemFrete && <p className="mt-2 text-sm text-red-500">{mensagemFrete}</p>}
+            </div>
+            {/* Lista de Itens no Carrinho */}
+            {/* Antes quando tinha muitos produtos no carrinho, nao conseguia rolar p baixo p ver os outros, melhorei essa parte tambem */}
+            {carrinho.length === 0 ? (
+              <p className="text-black">O carrinho está vazio.</p>
+            ) : (
+              <div className="space-y-4">
+                {carrinho.map((item) => (
+                  <ItemCarrinho key={item.id} item={item} removerDoCarrinho={removerDoCarrinho} atualizarQuantidade={atualizarQuantidade} />
+                ))}
               </div>
+            )}
+            {/* Resumo do Carrinho */}
+            {/* Mudei o estilo de como eles iam se exibir */}
+            <div className="mt-4 p-4 bg-gray-100 rounded-lg">
+              <p className="text-black">Subtotal: R$ {totalCarrinho.toFixed(2)}</p>
+              {frete !== null && <p className="text-black">Frete: R$ {frete.toFixed(2)}</p>}
+              <p className="text-xl font-bold mt-2 text-green-600">Total: R$ {totalComFrete.toFixed(2)}</p>
             </div>
           </motion.div>
         )}
