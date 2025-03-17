@@ -1,7 +1,11 @@
-import Image from 'next/image';
+"use client";
 
+import Image from 'next/image';
+import { useCarrinho } from '../contexto/ContextoCarrinho';
 
 export default function Card({ produto }) {
+  const {adicionarAoCarrinho} = useCarrinho();
+
   return (
     <div className="flex flex-col bg-white rounded-lg shadow-md overflow-hidden w-65">
       <div className="relative w-full h-96">
@@ -36,10 +40,7 @@ export default function Card({ produto }) {
           {/* Botão de Carrinho */}
           <button
             className="p-2 bg-white text-black border border-black-500 rounded-full hover:bg-orange-400 transition-colors duration-300"
-           // onClick={() => {
-              // Adicionar função de "Adicionar ao Carrinho" aqui
-              //console.log('Produto adicionado ao carrinho:', produto.descricao);
-           //</div> }}
+              onClick={() => adicionarAoCarrinho(produto)}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
