@@ -6,8 +6,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import ItemCarrinho from '@/app/components/ItemCarrinho';
 
 export default function NavBar() {
-  const { carrinho, removerDoCarrinho, atualizarQuantidade } = useCarrinho();
+  const { carrinho, removerDoCarrinho, atualizarQuantidade, calcularTotal } = useCarrinho();
   const [isCarrinhoAberto, setIsCarrinhoAberto] = useState(false);
+
+  //tentando trabalhar com cep apartir daqui:
+  const [cep, setCep] = useState('');
+  const [frete, setFrete] = useState(0);
+  const [mensagemFrete, setMensagemFrete] = useState('');
+
 
   const toggleCarrinho = () => {
     setIsCarrinhoAberto(!isCarrinhoAberto);
@@ -17,13 +23,58 @@ export default function NavBar() {
     setIsCarrinhoAberto(false);
   };
 
+  // Transportar isso daqui para um arquivo a parte.
+  const calcularFrete = async () => {
+    try {
+      const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+      const data = await response.json();
+
+      if (data.erro) {
+        setMensagemFrete('CEP inválido');
+        setFrete(0);
+        return;
+      }
+
+      const estado = data.uf;
+
+      if (estado === 'PB') {
+        setFrete(0);
+        setMensagemFrete('Elegível para frete grátis');
+      } else if (['RN', 'PE', 'AL', 'SE', 'BA', 'MA', 'PI', 'CE'].includes(estado)) {
+        setFrete(10);
+        setMensagemFrete('Frete: R$ 10,00');
+      } else if (['AM', 'PA', 'AC', 'RO', 'RR', 'AP', 'TO'].includes(estado)) {
+        setFrete(15);
+        setMensagemFrete('Frete: R$ 15,00');
+      } else if (['SP', 'RJ', 'MG', 'ES'].includes(estado)) {
+        setFrete(20);
+        setMensagemFrete('Frete: R$ 20,00');
+      } else if (['DF', 'GO', 'MT', 'MS'].includes(estado)) {
+        setFrete(25);
+        setMensagemFrete('Frete: R$ 25,00');
+      } else if (['RS', 'SC', 'PR'].includes(estado)) {
+        setFrete(30);
+        setMensagemFrete('Frete: R$ 30,00');
+      } else {
+        setFrete(0);
+        setMensagemFrete('Região não identificada');
+      }
+    } catch (error) {
+      setMensagemFrete('Erro ao calcular frete');
+      setFrete(0);
+    }
+  };
+
+  const totalCarrinho = calcularTotal();
+  const totalComFrete = totalCarrinho + frete;
+
   return (
     <nav className="bg-white shadow-md fixed w-full top-0 z-50">
       <div className="container mx-auto px-4 flex justify-between items-center h-16">
         {/* Logo ou Nome da Loja */}
         <div className="text-xl font-bold text-black">Minha Loja</div>
 
-        {/* Barra de Pesquisa (menor) */}
+        {/* Barra de Pesquisa */}
         <div className="flex-grow mx-4 relative max-w-md">
           <input
             type="text"
@@ -46,7 +97,6 @@ export default function NavBar() {
           </button>
         </div>
 
-        {/* Contêiner para os botões de Login e Carrinho */}
         <div className="flex items-center gap-2">
           {/* Ícone de Login */}
           <button className="p-2 text-black hover:text-orange-500">
@@ -87,14 +137,14 @@ export default function NavBar() {
         </div>
       </div>
 
-      {/* Aba Lateral do Carrinho com Animação */}
+      {/* Aba Lateral do Carrinho */}
       <AnimatePresence>
         {isCarrinhoAberto && (
           <motion.div
-            initial={{ x: '100%' }} // Começa fora da tela (à direita)
-            animate={{ x: 0 }} // Move para a posição inicial (0)
-            exit={{ x: '100%' }} // Sai da tela (à direita)
-            transition={{ type: 'tween', duration: 0.3 }} // Animação suave
+            initial={{ x: '100%' }}
+            animate={{ x: 0 }}
+            exit={{ x: '100%' }}
+            transition={{ type: 'tween', duration: 0.3 }}
             className="fixed top-0 right-0 h-full w-80 bg-white shadow-lg"
           >
             <div className="p-4">
@@ -118,11 +168,37 @@ export default function NavBar() {
               </button>
 
               <h2 className="text-xl font-bold mb-4 text-black">Carrinho</h2>
+
+              {/* Campo para calcular CEP */}
+              <div className="mb-4">
+                <input
+                  type="text"
+                  placeholder="Digite seu CEP"
+                  className="w-full px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:border-orange-500 text-black"
+                  value={cep}
+                  onChange={(e) => setCep(e.target.value)}
+                />
+                <button
+                  onClick={calcularFrete}
+                  className="mt-2 w-full bg-orange-500 text-white py-2 rounded-full hover:bg-orange-600"
+                >
+                  Calcular Frete
+                </button>
+                {mensagemFrete && (
+                  <p
+                    className={`mt-2 text-sm ${
+                      frete === 0 && estado === 'PB' ? 'text-green-500' : 'text-black'
+                    }`}
+                  >
+                    {mensagemFrete}
+                  </p>
+                )}
+              </div>
+
+              {/* Lista de Itens no Carrinho */}
               {carrinho.length === 0 ? (
                 <p className="text-black">O carrinho está vazio.</p>
               ) : (
-
-                //Estava dando erro aqui!
                 <div className="space-y-4">
                   {carrinho.map((item) => (
                     <ItemCarrinho
@@ -134,6 +210,15 @@ export default function NavBar() {
                   ))}
                 </div>
               )}
+
+              {/* Resumo do Carrinho */}
+              <div className="mt-4">
+                <p className="text-black">Subtotal: R$ {totalCarrinho.toFixed(2)}</p>
+                <p className="text-black">Frete: R$ {frete.toFixed(2)}</p>
+                <p className="text-black font-bold">
+                  Total: R$ {totalComFrete.toFixed(2)}
+                </p>
+              </div>
             </div>
           </motion.div>
         )}

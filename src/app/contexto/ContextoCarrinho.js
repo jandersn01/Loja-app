@@ -37,9 +37,21 @@ export const CarrinhoProvider = ({ children }) => {
     );
   };
 
+  const calcularTotal = () => {
+    return carrinho.reduce(
+      (total, item) => total + item.preco * item.quantidade,
+      0
+    );
+  };
+
   return (
     <CarrinhoContext.Provider
-      value={{ carrinho, adicionarAoCarrinho, removerDoCarrinho, atualizarQuantidade }}
+      value={{
+        carrinho,
+        adicionarAoCarrinho,
+        removerDoCarrinho,
+        atualizarQuantidade,
+        calcularTotal }}
     >
       {children}
     </CarrinhoContext.Provider>
