@@ -1,4 +1,4 @@
-
+import NavBar from "./components/navbar";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { CarrinhoProvider } from "./contexto/ContextoCarrinho";
@@ -25,6 +25,7 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <CarrinhoProvider>
+          <NavBar></NavBar>
           {children}
         </CarrinhoProvider>
         

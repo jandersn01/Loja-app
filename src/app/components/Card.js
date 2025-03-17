@@ -39,7 +39,7 @@ export default function Card({ produto }) {
  
           {/* Botão de Carrinho */}
           <button
-            className="p-2 bg-white text-black border border-black-500 rounded-full hover:bg-orange-400 transition-colors duration-300"
+            className="p-2 bg-white text-black border border-black-500 rounded-full hover:bg-orange-500 transition-colors duration-300"
               onClick={() => adicionarAoCarrinho(produto)}
           >
             <svg
