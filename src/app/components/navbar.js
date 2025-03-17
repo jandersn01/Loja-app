@@ -1,13 +1,11 @@
-
 "use client";
 
 import { useState } from 'react';
 import { useCarrinho } from '../contexto/ContextoCarrinho';
 import { motion, AnimatePresence } from 'framer-motion';
-import ItemCarrinho from './ItemCarrinho'; // Importe o componente ItemCarrinho
 
 export default function NavBar() {
-  const { carrinho, removerDoCarrinho, atualizarQuantidade } = useCarrinho();
+  const { carrinho } = useCarrinho();
   const [isCarrinhoAberto, setIsCarrinhoAberto] = useState(false);
 
   const toggleCarrinho = () => {
@@ -29,7 +27,7 @@ export default function NavBar() {
           <input
             type="text"
             placeholder="Pesquisar..."
-            className="w-full px-4 py-1 rounded-full border border-orange-500 focus:outline-none focus:border-orange-500 text-black"
+            className="w-full px-4 py-1 rounded-full border border-gray-300 focus:outline-none focus:border-orange-500 text-black"
           />
           <button className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">
             <svg
@@ -122,16 +120,13 @@ export default function NavBar() {
               {carrinho.length === 0 ? (
                 <p className="text-black">O carrinho está vazio.</p>
               ) : (
-                <div className="space-y-4">
-                  {carrinho.map((item) => (
-                    <ItemCarrinho
-                      key={item.id}
-                      item={item}
-                      removerDoCarrinho={removerDoCarrinho}
-                      atualizarQuantidade={atualizarQuantidade}
-                    />
+                <ul>
+                  {carrinho.map((produto, id) => (
+                    <li key={id} className="mb-2 text-black">
+                      {produto.descricao} - R$ {produto.preco.toFixed(2)}
+                    </li>
                   ))}
-                </div>
+                </ul>
               )}
             </div>
           </motion.div>

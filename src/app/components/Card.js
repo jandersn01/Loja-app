@@ -24,9 +24,9 @@ export default function Card({ produto }) {
       </div>
 
      
-      <div className="p-3"> {/* Reduzi o padding para diminuir a altura da parte branca */}
+      <div className="p-3">
         {/* Nome do Produto */}
-        <h3 className="text-sm font-semibold text-gray-800 mb-1"> {/* Reduzi o tamanho da fonte */}
+        <h3 className="text-sm font-semibold text-gray-800 mb-1">
           {produto.descricao}
         </h3>
 
