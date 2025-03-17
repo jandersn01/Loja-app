@@ -3,9 +3,10 @@
 import { useState } from 'react';
 import { useCarrinho } from '../contexto/ContextoCarrinho';
 import { motion, AnimatePresence } from 'framer-motion';
+import ItemCarrinho from '@/app/components/ItemCarrinho';
 
 export default function NavBar() {
-  const { carrinho } = useCarrinho();
+  const { carrinho, removerDoCarrinho, atualizarQuantidade } = useCarrinho();
   const [isCarrinhoAberto, setIsCarrinhoAberto] = useState(false);
 
   const toggleCarrinho = () => {
@@ -120,13 +121,18 @@ export default function NavBar() {
               {carrinho.length === 0 ? (
                 <p className="text-black">O carrinho está vazio.</p>
               ) : (
-                <ul>
-                  {carrinho.map((produto, id) => (
-                    <li key={id} className="mb-2 text-black">
-                      {produto.descricao} - R$ {produto.preco.toFixed(2)}
-                    </li>
+
+                //Estava dando erro aqui!
+                <div className="space-y-4">
+                  {carrinho.map((item) => (
+                    <ItemCarrinho
+                      key={item.id}
+                      item={item}
+                      removerDoCarrinho={removerDoCarrinho}
+                      atualizarQuantidade={atualizarQuantidade}
+                    />
                   ))}
-                </ul>
+                </div>
               )}
             </div>
           </motion.div>
