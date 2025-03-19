@@ -1,5 +1,6 @@
 "use client";
 
+import ModalPagamento from './ModalPagamento';
 import { useState } from 'react'; 
 import { useCarrinho } from '../contexto/ContextoCarrinho'; 
 import { motion, AnimatePresence } from 'framer-motion'; 
@@ -9,6 +10,9 @@ import ItemCarrinho from '@/app/components/ItemCarrinho';
 export default function NavBar() { 
   const { carrinho, removerDoCarrinho, atualizarQuantidade, calcularTotal } = useCarrinho(); 
   const [isCarrinhoAberto, setIsCarrinhoAberto] = useState(false); 
+
+  //Aqui são os estados do modal de formas de pagamento
+  const [isModalPagamentoAberto, setIsModalPagamentoAberto] = useState(false);
 
   //tentando trabalhar com cep apartir daqui:
   const [cep, setCep] = useState(''); 
@@ -194,6 +198,7 @@ export default function NavBar() {
               </button>
               {mensagemFrete && <p className="mt-2 text-sm text-red-500">{mensagemFrete}</p>}
             </div>
+            
             {/* Lista de Itens no Carrinho */}
             {/* Antes quando tinha muitos produtos no carrinho, nao conseguia rolar p baixo p ver os outros, melhorei essa parte tambem */}
             {carrinho.length === 0 ? (
@@ -212,11 +217,12 @@ export default function NavBar() {
               {frete !== null && <p className="text-black">Frete: R$ {frete.toFixed(2)}</p>}
               <p className="text-xl font-bold mt-2 text-green-600">Total: R$ {totalComFrete.toFixed(2)}</p>
               {carrinho.length > 0 && frete !== null ? (
-                 <button className="mt-2 w-full bg-orange-500 text-white py-2 rounded-full">
+                 <button className="mt-2 w-full bg-orange-500 text-white py-2 rounded-full"  onClick={() => setIsModalPagamentoAberto(true)}>
                  Selecionar Forma de Pagamento
                </button>
               ) : (
-                <button className="mt-2 w-full bg-gray-500 text-white py-2 rounded-full">
+                <button className="mt-2 w-full bg-gray-500 text-white py-2 rounded-full cursor-not-allowed"
+                disabled>
                 Selecionar Forma de Pagamento
                 </button>
               
@@ -226,6 +232,13 @@ export default function NavBar() {
           </motion.div>
         )}
       </AnimatePresence>
+      <ModalPagamento
+        isOpen={isModalPagamentoAberto}
+        onClose={() => setIsModalPagamentoAberto(false)}
+        onConfirm={() => {
+          limparCep();
+          carrinho.forEach((item) => removerDoCarrinho(item.id));
+      }} />
     </nav>
   );
 }
