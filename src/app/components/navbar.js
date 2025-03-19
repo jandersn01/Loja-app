@@ -3,7 +3,7 @@
 import { useState } from 'react'; 
 import { useCarrinho } from '../contexto/ContextoCarrinho'; 
 import { motion, AnimatePresence } from 'framer-motion'; 
-import { FaSpinner } from 'react-icons/fa'; // isso foi para que o spinner pudesse ter, puxei no proprio react
+import { FaSpinner } from 'react-icons/fa';
 import ItemCarrinho from '@/app/components/ItemCarrinho'; 
 
 export default function NavBar() { 
@@ -89,10 +89,8 @@ export default function NavBar() {
   return (
     <nav className="bg-white shadow-md fixed w-full top-0 z-50">
       <div className="container mx-auto px-4 flex justify-between items-center h-16">
-        {/* Logo ou Nome da Loja */}
         <div className="text-xl font-bold text-black">Minha Loja</div>
 
-        {/* Barra de Pesquisa */}
         <div className="flex-grow mx-4 relative max-w-md">
           <input
             type="text"
@@ -116,7 +114,6 @@ export default function NavBar() {
         </div>
 
         <div className="flex items-center gap-2">
-          {/* Ícone de Login */}
           <button className="p-2 text-black hover:text-orange-500">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -132,7 +129,6 @@ export default function NavBar() {
             </svg>
           </button>
 
-          {/* Ícone do Carrinho */}
           <button
             onClick={toggleCarrinho}
             className="relative p-2 text-black hover:text-orange-500"
@@ -145,7 +141,6 @@ export default function NavBar() {
             >
               <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />
             </svg>
-            {/* Contador de Itens no Carrinho */}
             {carrinho.length > 0 && (
               <span className="absolute top-0 right-0 bg-orange-500 text-white text-xs rounded-full px-1">
                 {carrinho.length}
@@ -154,6 +149,7 @@ export default function NavBar() {
           </button>
         </div>
       </div>
+
 {/* Aba Lateral do Carrinho */}
       <AnimatePresence>
         {isCarrinhoAberto && (
@@ -215,6 +211,17 @@ export default function NavBar() {
               <p className="text-black">Subtotal: R$ {totalCarrinho.toFixed(2)}</p>
               {frete !== null && <p className="text-black">Frete: R$ {frete.toFixed(2)}</p>}
               <p className="text-xl font-bold mt-2 text-green-600">Total: R$ {totalComFrete.toFixed(2)}</p>
+              {carrinho.length > 0 && frete !== null ? (
+                 <button className="mt-2 w-full bg-orange-500 text-white py-2 rounded-full">
+                 Selecionar Forma de Pagamento
+               </button>
+              ) : (
+                <button className="mt-2 w-full bg-gray-500 text-white py-2 rounded-full">
+                Selecionar Forma de Pagamento
+                </button>
+              
+              )}
+              
             </div>
           </motion.div>
         )}

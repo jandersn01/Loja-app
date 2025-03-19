@@ -1,4 +1,3 @@
-// src/app/components/ItemCarrinho.js
 "use client";
 
 import { useState } from 'react';
@@ -20,7 +19,6 @@ export default function ItemCarrinho({ item, removerDoCarrinho, atualizarQuantid
 
   return (
     <div className="flex items-center justify-between p-4 border-b border-gray-200">
-      {/* Imagem do Produto */}
       <div className="w-20 h-20 flex-shrink-0">
         <img
           src={item.imagem}
@@ -29,11 +27,9 @@ export default function ItemCarrinho({ item, removerDoCarrinho, atualizarQuantid
         />
       </div>
 
-      {/* Informações do Produto */}
       <div className="flex-grow ml-4">
         <p className="text-sm font-medium text-black">{item.descricao}</p>
         <div className="flex items-center mt-2">
-          {/* Botões de Quantidade */}
           <div className="flex items-center gap-2">
             <button
               onClick={diminuirQuantidade}
@@ -50,7 +46,6 @@ export default function ItemCarrinho({ item, removerDoCarrinho, atualizarQuantid
             </button>
           </div>
 
-          {/* Botão de Remover */}
           <button
             onClick={() => removerDoCarrinho(item.id)}
             className="ml-4 text-red-500 hover:text-red-600"
