@@ -1,23 +1,18 @@
 "use client";
 
 import { createContext, useState, useContext } from 'react';
+import ItemCarrinho from '../components/ItemCarrinho';
 
 const CarrinhoContext = createContext();
 
 export const CarrinhoProvider = ({ children }) => {
   const [carrinho, setCarrinho] = useState([]);
+  const [quantidade] = useState(1)
 
   const adicionarAoCarrinho = (produto) => {
     const itemExistente = carrinho.find((item) => item.id === produto.id);
     if (itemExistente) {
-      // Se o item já existe, aumenta a quantidade
-      setCarrinho(
-        carrinho.map((item) =>
-          item.id === produto.id
-            ? { ...item, quantidade: item.quantidade + 1 }
-            : item
-        )
-      );
+      atualizarQuantidade(produto.id, itemExistente.quantidade + 1) 
     } else {
       // Se o item não existe, adiciona ao carrinho com quantidade 1
       setCarrinho([...carrinho, { ...produto, quantidade: 1 }]);

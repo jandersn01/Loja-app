@@ -4,16 +4,14 @@ import { useState } from 'react';
 import Image from 'next/image';
 
 export default function ItemCarrinho({ item, removerDoCarrinho, atualizarQuantidade }) {
-  const [quantidade, setQuantidade] = useState(1);
+  const quantidade = item.quantidade;
 
   const aumentarQuantidade = () => {
-    setQuantidade(quantidade + 1);
     atualizarQuantidade(item.id, quantidade + 1);
   };
 
   const diminuirQuantidade = () => {
     if (quantidade > 1) {
-      setQuantidade(quantidade - 1);
       atualizarQuantidade(item.id, quantidade - 1);
     }
   };

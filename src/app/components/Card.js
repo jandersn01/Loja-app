@@ -15,17 +15,16 @@ export default function Card({ produto }) {
           fill
           style={{ objectFit: 'cover' }}
         />
-        {/* Badge de Desconto */}
+        {/* Badge de Desconto 
         {produto.desconto && (
           <div className="absolute top-2 right-2 bg-red-600 text-white text-xs font-semibold px-2 py-1 rounded-full">
             {produto.desconto}% OFF
           </div>
-        )}
+        )}*/}
       </div>
 
      
       <div className="p-3">
-        {/* Nome do Produto */}
         <h3 className="text-sm font-semibold text-gray-800 mb-1">
           {produto.descricao}
         </h3>
@@ -53,12 +52,12 @@ export default function Card({ produto }) {
           </button>
         </div>
 
-        {/* Percentual de Desconto */}
+        {/* Percentual de Desconto 
         {produto.desconto && (
           <div className="text-sm text-red-600 mt-1">
             {produto.desconto}% de desconto
           </div>
-        )}
+        )}*/}
       </div>
     </div>
   );
