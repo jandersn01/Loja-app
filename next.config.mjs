@@ -1,13 +1,16 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    images: {
-        remotePatterns: [
-          {
-            protocol: 'https',
-            hostname: 'enndfjrjvqzggyqygdai.supabase.co',
-          },
-        ],
-      },
+  //output: "export",
+  images: {
+      //unoptimized: true,
+      remotePatterns: [
+        {
+          protocol: 'https',
+          hostname: 'enndfjrjvqzggyqygdai.supabase.co',
+        },
+      ],
+    },
+  //distDir: "out",
 };
 
 export default nextConfig;

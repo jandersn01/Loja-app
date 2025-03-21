@@ -1,8 +1,8 @@
 "use client";
 
-import ModalPagamento from './ModalPagamento';
+import ModalPagamento from '@/app/components/ModalPagamento';
 import { useState } from 'react'; 
-import { useCarrinho } from '../contexto/ContextoCarrinho'; 
+import { useCarrinho } from '@/app/contexto/ContextoCarrinho'; 
 import { motion, AnimatePresence } from 'framer-motion'; 
 import { FaSpinner } from 'react-icons/fa';
 import ItemCarrinho from '@/app/components/ItemCarrinho'; 

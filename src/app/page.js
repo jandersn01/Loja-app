@@ -1,5 +1,5 @@
-import { supabase } from './lib/supabaseClient.js';
-import Card from './components/Card.js';
+import { supabase } from '@/app/lib/supabaseClient.js';
+import Card from '@/app/components/Card.js';
 
 export default async function Home() {
 

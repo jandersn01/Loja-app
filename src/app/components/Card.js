@@ -1,7 +1,7 @@
 "use client";
 
 import Image from 'next/image';
-import { useCarrinho } from '../contexto/ContextoCarrinho';
+import { useCarrinho } from '@/app/contexto/ContextoCarrinho';
 
 export default function Card({ produto }) {
   const {adicionarAoCarrinho} = useCarrinho();
