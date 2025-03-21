@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from 'react';
+import Image from 'next/image';
 
 export default function ItemCarrinho({ item, removerDoCarrinho, atualizarQuantidade }) {
   const [quantidade, setQuantidade] = useState(1);
@@ -20,11 +21,14 @@ export default function ItemCarrinho({ item, removerDoCarrinho, atualizarQuantid
   return (
     <div className="flex items-center justify-between p-4 border-b border-gray-200">
       <div className="w-20 h-20 flex-shrink-0">
-        <img
-          src={item.imagem}
-          alt={item.descricao}
-          className="w-full h-full object-cover rounded"
-        />
+        <div className="w-full h-full relative rounded overflow-hidden">
+          <Image
+            src={item.imagem}
+            alt={item.descricao}
+            fill 
+            style={{ objectFit: "cover" }}
+          />
+        </div>
       </div>
 
       <div className="flex-grow ml-4">

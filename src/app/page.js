@@ -3,7 +3,7 @@ import Card from './components/Card.js';
 
 export default async function Home() {
 
-
+  //Deveria estar dentro de useefect
   const { data: produtos, error } = await supabase
     .from('produto')
     .select('*');

@@ -1,7 +1,8 @@
-"use client"; 
+"use client";
 
 import { motion } from "framer-motion";
 import { useState } from "react";
+import Image from "next/image";
 
 const ModalPagamento = ({ isOpen, onClose, onConfirm }) => {
   const [formaPagamentoSelecionada, setFormaPagamentoSelecionada] = useState(null);
@@ -11,7 +12,7 @@ const ModalPagamento = ({ isOpen, onClose, onConfirm }) => {
 
   const handleConfirmar = () => {
     if (formaPagamentoSelecionada) {
-      onConfirm(); 
+      onConfirm();
       setPagamentoConfirmado(true);
     }
   };
@@ -30,9 +31,8 @@ const ModalPagamento = ({ isOpen, onClose, onConfirm }) => {
         animate={{ y: 0 }}
         exit={{ y: -50 }}
       >
-
         <button
-          onClick={onClose} // Fecha o modal ao clicar
+          onClick={onClose}
           className="absolute top-4 right-4 text-black hover:text-orange-500"
         >
           <svg
@@ -56,7 +56,7 @@ const ModalPagamento = ({ isOpen, onClose, onConfirm }) => {
             <p className="text-gray-600 mb-6">Obrigado por sua compra.</p>
             <button
               onClick={() => {
-                onClose(); // Fecha o modal
+                onClose(); 
                 setPagamentoConfirmado(false); // Reseta o estado de confirmação
               }}
               className="bg-green-500 text-white px-6 py-2 rounded-full"
@@ -77,7 +77,12 @@ const ModalPagamento = ({ isOpen, onClose, onConfirm }) => {
               onClick={() => setFormaPagamentoSelecionada("pix")}
             >
               <div className="flex items-center gap-3">
-                <img src="/icons/pix.png" alt="PIX" className="w-6 h-6" />
+                <Image
+                  src="/icons/pix.png"
+                  alt="PIX"
+                  width={24}
+                  height={24}
+                />
                 <span className="text-black">PIX</span>
               </div>
               {formaPagamentoSelecionada === "pix" && (
@@ -94,7 +99,12 @@ const ModalPagamento = ({ isOpen, onClose, onConfirm }) => {
               onClick={() => setFormaPagamentoSelecionada("boleto")}
             >
               <div className="flex items-center gap-3">
-                <img src="/icons/boleto.png" alt="Boleto" className="w-6 h-6" /> 
+                <Image
+                  src="/icons/boleto.png"
+                  alt="Boleto"
+                  width={24}
+                  height={24}
+                />
                 <span className="text-black">Boleto</span>
               </div>
               {formaPagamentoSelecionada === "boleto" && (
@@ -111,7 +121,12 @@ const ModalPagamento = ({ isOpen, onClose, onConfirm }) => {
               onClick={() => setFormaPagamentoSelecionada("cartao")}
             >
               <div className="flex items-center gap-3">
-                <img src="/icons/cartao.png" alt="Cartão de Crédito" className="w-6 h-6" />
+                <Image
+                  src="/icons/cartao.png"
+                  alt="Cartão de Crédito"
+                  width={24}
+                  height={24}
+                />
                 <span className="text-black">Cartão de Crédito</span>
               </div>
               {formaPagamentoSelecionada === "cartao" && (
@@ -121,19 +136,21 @@ const ModalPagamento = ({ isOpen, onClose, onConfirm }) => {
             <p className="text-sm text-gray-500 mt-1 mb-4">Até 10x sem juros</p>
 
             <div className="flex justify-center mt-6">
-            {formaPagamentoSelecionada ? (
+              {formaPagamentoSelecionada ? (
                 <button
-                onClick={handleConfirmar}
-                className="bg-orange-500 text-white px-6 py-2 rounded-full hover:bg-orange-600"
-              >
-                Confirmar
-              </button>
-            ):( <button
-                className="bg-gray-500 text-white px-6 py-2 rounded-full" disabled
-              >
-                Confirmar
-              </button>)}
-              
+                  onClick={handleConfirmar}
+                  className="bg-orange-500 text-white px-6 py-2 rounded-full hover:bg-orange-600"
+                >
+                  Confirmar
+                </button>
+              ) : (
+                <button
+                  className="bg-gray-500 text-white px-6 py-2 rounded-full"
+                  disabled
+                >
+                  Confirmar
+                </button>
+              )}
             </div>
           </>
         )}

@@ -8,7 +8,7 @@ import { FaSpinner } from 'react-icons/fa';
 import ItemCarrinho from '@/app/components/ItemCarrinho'; 
 
 export default function NavBar() { 
-  const { carrinho, removerDoCarrinho, atualizarQuantidade, calcularTotal } = useCarrinho(); 
+  const { carrinho, removerDoCarrinho, atualizarQuantidade, calcularTotal, limparCarrinho } = useCarrinho(); 
   const [isCarrinhoAberto, setIsCarrinhoAberto] = useState(false); 
 
   //Aqui são os estados do modal de formas de pagamento
@@ -237,7 +237,7 @@ export default function NavBar() {
         onClose={() => setIsModalPagamentoAberto(false)}
         onConfirm={() => {
           limparCep();
-          carrinho.forEach((item) => removerDoCarrinho(item.id));
+          limparCarrinho();
       }} />
     </nav>
   );

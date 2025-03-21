@@ -1,4 +1,3 @@
-// src/app/contexto/ContextoCarrinho.js
 "use client";
 
 import { createContext, useState, useContext } from 'react';
@@ -29,6 +28,7 @@ export const CarrinhoProvider = ({ children }) => {
     setCarrinho(carrinho.filter((item) => item.id !== produtoId));
   };
 
+
   const atualizarQuantidade = (produtoId, novaQuantidade) => {
     setCarrinho(
       carrinho.map((item) =>
@@ -36,6 +36,10 @@ export const CarrinhoProvider = ({ children }) => {
       )
     );
   };
+
+  const limparCarrinho = () =>{
+    setCarrinho([]);
+  }
 
   const calcularTotal = () => {
     return carrinho.reduce(
@@ -51,6 +55,7 @@ export const CarrinhoProvider = ({ children }) => {
         adicionarAoCarrinho,
         removerDoCarrinho,
         atualizarQuantidade,
+        limparCarrinho,
         calcularTotal }}
     >
       {children}
