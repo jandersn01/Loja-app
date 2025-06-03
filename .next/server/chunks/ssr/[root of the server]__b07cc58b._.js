@@ -1010,11 +1010,28 @@ function NavBar() {
                                     fileName: "[project]/src/app/components/navbar.js",
                                     lineNumber: 220,
                                     columnNumber: 18
-                                }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                    className: "mt-2 w-full bg-gray-500 text-white py-2 rounded-full cursor-not-allowed",
-                                    disabled: true,
-                                    children: "Selecionar Forma de Pagamento"
-                                }, void 0, false, {
+                                }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "relative group",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                            className: "mt-2 w-full bg-gray-500 text-white py-2 rounded-full cursor-not-allowed",
+                                            disabled: true,
+                                            children: "Selecionar Forma de Pagamento"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/app/components/navbar.js",
+                                            lineNumber: 225,
+                                            columnNumber: 21
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "absolute top-full left-1/2 -translate-x-1/2 mt-2 w-56 px-3 py-2 bg-black text-white text-sm rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-50 pointer-events-none",
+                                            children: "Para continuar, primeiro digite o CEP da sua localidade."
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/app/components/navbar.js",
+                                            lineNumber: 231,
+                                            columnNumber: 21
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
                                     fileName: "[project]/src/app/components/navbar.js",
                                     lineNumber: 224,
                                     columnNumber: 17
@@ -1045,7 +1062,7 @@ function NavBar() {
                 }
             }, void 0, false, {
                 fileName: "[project]/src/app/components/navbar.js",
-                lineNumber: 235,
+                lineNumber: 242,
                 columnNumber: 7
             }, this)
         ]

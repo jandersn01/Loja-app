@@ -221,11 +221,18 @@ export default function NavBar() {
                  Selecionar Forma de Pagamento
                </button>
               ) : (
-                <button className="mt-2 w-full bg-gray-500 text-white py-2 rounded-full cursor-not-allowed"
-                disabled>
-                Selecionar Forma de Pagamento
-                </button>
-              
+                <div className="relative group">
+                    <button
+                      className="mt-2 w-full bg-gray-500 text-white py-2 rounded-full cursor-not-allowed"
+                      disabled
+                    >
+                      Selecionar Forma de Pagamento
+                    </button>
+                    <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-56 px-3 py-2 bg-black text-white text-sm rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-50 pointer-events-none">
+                      Para continuar, primeiro digite o CEP da sua localidade.
+                    </div>
+                  </div>
+                                
               )}
               
             </div>
